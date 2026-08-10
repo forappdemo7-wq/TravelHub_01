@@ -1,0 +1,122 @@
+[
+  {
+    "id": "1",
+    "name": "Mediterranean Majesty",
+    "ship": "Royal Odyssey",
+    "destination": "Mediterranean (Barcelona, Rome, Athens)",
+    "duration": "7 Nights",
+    "price": 2499,
+    "rating": 4.9,
+    "image": "https://images.unsplash.com/photo-1548574505-5e239809ee19?w=800",
+    "description": "Experience the ultimate Mediterranean cruise visiting iconic ports across Italy, Greece, and Spain. Luxury, culture, and breathtaking scenery.",
+    "highlights": [
+      "Private balcony stateroom",
+      "Unlimited premium beverages",
+      "Excursions to ancient ruins",
+      "Gourmet dining experiences"
+    ],
+    "included": [
+      "All meals and snacks",
+      "Entertainment and activities",
+      "Port taxes and fees",
+      "24-hour room service"
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Caribbean Paradise",
+    "ship": "Sunset Voyager",
+    "destination": "Eastern Caribbean (Nassau, St. Thomas, St. Maarten)",
+    "duration": "5 Nights",
+    "price": 1899,
+    "rating": 4.8,
+    "image": "https://images.pexels.com/photos/11820065/pexels-photo-11820065.jpeg",
+    "description": "Sail to the Caribbean's most beautiful islands, relax on pristine beaches, and enjoy vibrant onboard entertainment.",
+    "highlights": [
+      "Beach cabana day",
+      "Snorkeling excursions",
+      "Live music & shows",
+      "All-inclusive beverage package"
+    ],
+    "included": [
+      "All meals and non-alcoholic drinks",
+      "Use of water slides and pools",
+      "Fitness center access",
+      "Kids club activities"
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Norwegian Fjords",
+    "ship": "Nordic Star",
+    "destination": "Norwegian Fjords (Bergen, Geiranger, Flåm)",
+    "duration": "6 Nights",
+    "price": 3199,
+    "rating": 4.9,
+    "image": "https://images.pexels.com/photos/16617240/pexels-photo-16617240.jpeg",
+    "description": "Cruise through the majestic Norwegian fjords, witness waterfalls, glaciers, and charming coastal villages.",
+    "highlights": [
+      "Fjord helicopter tour",
+      "Aurora Borealis viewing",
+      "Guided nature walks",
+      "Sauna and spa access"
+    ],
+    "included": [
+      "All excursions",
+      "Thermal suite access",
+      "Specialty dining",
+      "Premium drinks package"
+    ]
+  },
+  {
+    "name": "rr",
+    "ship": "rrr",
+    "destination": "rrr",
+    "duration": "7 Nights",
+    "price": 1000,
+    "rating": 3.9,
+    "image": "https://images.pexels.com/photos/775294/pexels-photo-775294.jpeg",
+    "description": "hi",
+    "highlights": [
+      "hi"
+    ],
+    "included": [
+      "hi"
+    ],
+    "id": "1775036039934"
+  },
+  {
+    "name": "k1",
+    "ship": "ship1",
+    "destination": "11",
+    "duration": "10 Nights",
+    "price": 999,
+    "rating": 4,
+    "image": "https://images.pexels.com/photos/5959427/pexels-photo-5959427.jpeg",
+    "description": "hi",
+    "highlights": [
+      "hi"
+    ],
+    "included": [
+      "hi"
+    ],
+    "id": "1775105277195"
+  },
+  {
+    "name": "lll",
+    "ship": "lj",
+    "destination": "ki",
+    "duration": "4",
+    "price": 1567,
+    "rating": 3.5,
+    "image": "https://images.pexels.com/photos/32906967/pexels-photo-32906967.jpeg",
+    "description": "uy",
+    "highlights": [
+      "6u"
+    ],
+    "included": [
+      "uy"
+    ],
+    "id": "1775633100057"
+  }
+]

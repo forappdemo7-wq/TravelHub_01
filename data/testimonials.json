@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "name": "Sarah Johnson",
+    "location": "New York, USA",
+    "rating": 5,
+    "comment": "Amazing experience! The Bali tour exceeded all expectations. The guides were knowledgeable and the itinerary was perfect.",
+    "image": "https://randomuser.me/api/portraits/women/1.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Michael Chen",
+    "location": "Singapore",
+    "rating": 5,
+    "comment": "Japan tour was incredible! Everything was well-organized and the cultural experiences were authentic.",
+    "image": "https://randomuser.me/api/portraits/men/2.jpg"
+  },
+  {
+    "id": "3",
+    "name": "Emma Watson",
+    "location": "London, UK",
+    "rating": 4,
+    "comment": "Santorini was magical! The sunset views were breathtaking. Highly recommend this tour package.",
+    "image": "https://randomuser.me/api/portraits/women/3.jpg"
+  },
+  {
+    "name": "j",
+    "location": "lll",
+    "rating": 3,
+    "comment": "nice",
+    "image": "https://randomuser.me/api/portraits/women/4.jpg",
+    "id": "1775108982396"
+  },
+  {
+    "name": "w",
+    "location": "se",
+    "rating": 5,
+    "comment": "hi",
+    "image": "https://randomuser.me/api/portraits/women/5.jpg",
+    "id": "1775109726041"
+  }
+]

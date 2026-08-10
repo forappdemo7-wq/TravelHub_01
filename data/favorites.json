@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1776162624948",
+    "userEmail": "kk@df.com",
+    "itemId": "1",
+    "itemType": "tour",
+    "itemName": "Bali Paradise Explorer",
+    "itemImage": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
+    "itemPrice": 899,
+    "addedAt": "2026-04-14T10:30:24.948Z"
+  },
+  {
+    "id": "1776251267646",
+    "userEmail": "kk@df.com",
+    "itemId": "3",
+    "itemType": "tour",
+    "itemName": "Santorini Romance",
+    "itemImage": "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800",
+    "itemPrice": 1299,
+    "addedAt": "2026-04-15T11:07:47.646Z"
+  }
+]

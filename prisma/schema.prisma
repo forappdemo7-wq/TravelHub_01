@@ -1,0 +1,128 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  password     String
+  avatar       String?
+  createdAt    DateTime      @default(now())
+  resetTokens  ResetToken[]
+  bookings     Booking[]
+  favorites    Favorite[]
+}
+
+model Tour {
+  id          String   @id @default(cuid())
+  name        String
+  location    String
+  duration    String
+  price       Int
+  rating      Float
+  image       String
+  images      String[]
+  description String
+  highlights  String[]
+  included    String[]
+}
+
+model Cruise {
+  id          String   @id @default(cuid())
+  name        String
+  ship        String
+  price       Int
+  duration    String
+  image       String
+  description String
+  destination String
+}
+
+model Restaurant {
+  id             String   @id @default(cuid())
+  name           String
+  description    String
+  image          String
+  cuisine        String
+  priceLevel     String
+  price          Int
+  rating         Float
+  reviewsCount   Int
+  location       String
+  address        String
+  phone          String
+  hours          String
+  dietaryOptions String[]
+  destinationId  String?
+  coordinates    Json?
+  menuHighlights String[]
+  bookable       Boolean   @default(false)
+  bookingUrl     String?
+}
+
+model Destination {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  name           String
+  country        String
+  image          String
+  description    String
+  price          Int
+  duration       String
+  rating         Float
+  reviewsCount   Int
+  highlights     String[]
+  activities     String[]
+  size           String?
+}
+
+model Booking {
+  id              String   @id @default(cuid())
+  userId          String
+  userEmail       String
+  userName        String
+  userPhone       String
+  itemId          String
+  itemType        String
+  itemName        String
+  itemImage       String
+  itemPrice       Int
+  travelers       Int
+  totalPrice      Int
+  travelDate      String
+  specialRequests String?
+  status          String
+  bookingDate     DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Favorite {
+  id          String   @id @default(cuid())
+  userEmail   String
+  userId      String
+  itemId      String
+  itemType    String
+  itemName    String
+  itemImage   String
+  itemPrice   Int
+  addedAt     DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  role      String   @default("user")
+  consumed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  user      User     @relation(fields: [email], references: [email])
+}
