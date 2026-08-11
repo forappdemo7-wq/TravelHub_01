@@ -5,7 +5,7 @@
     "location": "New York, USA",
     "rating": 5,
     "comment": "Amazing experience! The Bali tour exceeded all expectations. The guides were knowledgeable and the itinerary was perfect.",
-    "image": "https://randomuser.me/api/portraits/women/1.jpg"
+    "image": "https://randomuser.me/api/portraits/women/11.jpg"
   },
   {
     "id": "2",
@@ -38,5 +38,13 @@
     "comment": "hi",
     "image": "https://randomuser.me/api/portraits/women/5.jpg",
     "id": "1775109726041"
+  },
+  {
+    "name": "kkk",
+    "location": "hk",
+    "rating": 5,
+    "comment": "llj",
+    "image": "https://randomuser.me/api/portraits/women/17.jpg",
+    "id": "1786470948137"
   }
 ]

@@ -33,8 +33,9 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { name, ship, price, duration, image, description, destination, highlights, included, featured } = body;
+    const { name, ship, price, duration, image, description, destination, featured } = body;
 
+    // Validate required fields
     if (!name || !ship || !price || !duration || !image || !description || !destination) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -48,9 +49,8 @@ export async function POST(req: NextRequest) {
         image,
         description,
         destination,
-        highlights: highlights || [],
-        included: included || [],
         featured: featured ?? false,
+        // ❌ NO 'highlights' or 'included' – they don't exist in the model
       },
     });
     return NextResponse.json(newCruise, { status: 201 });
@@ -79,6 +79,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Cruise not found' }, { status: 404 });
     }
 
+    // ✅ Only update fields that exist in the model
     const updated = await prisma.cruise.update({
       where: { id },
       data: {
@@ -89,9 +90,8 @@ export async function PUT(req: NextRequest) {
         image: body.image ?? existing.image,
         description: body.description ?? existing.description,
         destination: body.destination ?? existing.destination,
-        highlights: body.highlights ?? existing.highlights,
-        included: body.included ?? existing.included,
         featured: body.featured !== undefined ? body.featured : existing.featured,
+        // ❌ NO 'highlights' or 'included' – they don't exist in the model
       },
     });
     return NextResponse.json(updated);
