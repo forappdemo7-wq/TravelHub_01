@@ -62,27 +62,44 @@ export default function TourDetailPage() {
     }
   }, [session, tour]);
 
-  const handleAddToFavorites = async () => {
+  // ─── Toggle favorite ──────────────────────────────────────────────
+  const handleToggleFavorite = async () => {
     if (!session) {
       router.push('/auth/signin?callbackUrl=' + window.location.pathname);
       return;
     }
     if (!tour) return;
-    
+
     setFavLoading(true);
     try {
-      const res = await fetch('/api/favorites', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          itemId: tour.id,
-          itemType: 'tour',
-          itemName: tour.name,
-          itemImage: tour.image,
-          itemPrice: tour.price,
-        }),
-      });
-      if (res.ok) setIsFavorite(true);
+      if (isFavorite) {
+        // ─── Remove from favorites ──────────────────────────────
+        const res = await fetch('/api/favorites');
+        const favorites = await res.json();
+        const favorite = favorites.find(
+          (fav: any) => fav.itemId === tour.id && fav.itemType === 'tour'
+        );
+        if (favorite) {
+          const deleteRes = await fetch(`/api/favorites?id=${favorite.id}`, {
+            method: 'DELETE',
+          });
+          if (deleteRes.ok) setIsFavorite(false);
+        }
+      } else {
+        // ─── Add to favorites ────────────────────────────────────
+        const res = await fetch('/api/favorites', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            itemId: tour.id,
+            itemType: 'tour',
+            itemName: tour.name,
+            itemImage: tour.image,
+            itemPrice: tour.price,
+          }),
+        });
+        if (res.ok) setIsFavorite(true);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -123,16 +140,16 @@ export default function TourDetailPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
         
-        {/* Navigation Overlays */}
-        <div className="absolute top-8 left-0 right-0 z-20">
+        {/* ─── Navigation Overlays – adjusted top to avoid header ─── */}
+        <div className="absolute top-[100px] left-0 right-0 z-30">
           <div className="container mx-auto px-6 flex justify-between">
             <button 
               onClick={() => router.back()}
-              className="p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all"
+              className="p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all shadow-lg"
             >
               <ChevronLeft size={24} />
             </button>
-            <button className="p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all">
+            <button className="p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all shadow-lg">
               <Share2 size={22} />
             </button>
           </div>
@@ -252,16 +269,16 @@ export default function TourDetailPage() {
                 </Link>
 
                 <button
-                  onClick={handleAddToFavorites}
-                  disabled={favLoading || isFavorite}
-                  className="group flex items-center justify-center gap-3 w-full py-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95"
+                  onClick={handleToggleFavorite}
+                  disabled={favLoading}
+                  className="group flex items-center justify-center gap-3 w-full py-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95 disabled:opacity-50"
                 >
                   {favLoading ? (
                     <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                   ) : (
-                    <Heart className={`w-5 h-5 transition-colors ${isFavorite ? 'fill-red-500 text-red-500 border-red-500' : 'group-hover:text-red-500'}`} />
+                    <Heart className={`w-5 h-5 transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : 'group-hover:text-red-500'}`} />
                   )}
-                  {isFavorite ? 'Saved to Favorites' : 'Save for Later'}
+                  {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
                 </button>
               </div>
 
