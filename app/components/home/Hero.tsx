@@ -17,21 +17,17 @@ export default function Hero() {
 
   const isLight = mounted && resolvedTheme === 'light';
 
-  // ─── Cloudinary Video URLs ──────────────────────────────────────────
   const videoSrc = isLight
-    ? 'https://res.cloudinary.com/dqz2aoygf/video/upload/v1786361934/hero_2_owmved.mp4'   // light theme
-    : 'https://res.cloudinary.com/dqz2aoygf/video/upload/v1786361660/hero_erexue.mp4';      // dark theme
+    ? 'https://res.cloudinary.com/dqz2aoygf/video/upload/v1786361934/hero_2_owmved.mp4'
+    : 'https://res.cloudinary.com/dqz2aoygf/video/upload/v1786361660/hero_erexue.mp4';
 
   const posterImage =
     'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1800&q=90';
 
   return (
-    <section className="relative h-screen min-h-[760px] overflow-hidden bg-black flex items-center">
-
-      {/* ================= Background ================= */}
-
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-black">
+      {/* Background */}
       <div className="absolute inset-0 overflow-hidden">
-
         <video
           key={videoSrc}
           autoPlay
@@ -56,8 +52,6 @@ export default function Hero() {
           <source src={videoSrc} type="video/mp4" />
         </video>
 
-        {/* Cinematic Overlay */}
-
         <div
           className={`absolute inset-0 transition-all duration-700 ${
             isLight
@@ -65,8 +59,6 @@ export default function Hero() {
               : 'bg-gradient-to-r from-black/25 via-black/5 to-black/15'
           }`}
         />
-
-        {/* Top Fade */}
 
         <div
           className={`absolute inset-x-0 top-0 h-48 transition-all duration-700 ${
@@ -76,8 +68,6 @@ export default function Hero() {
           }`}
         />
 
-        {/* Bottom Fade */}
-
         <div
           className={`absolute inset-x-0 bottom-0 h-56 transition-all duration-700 ${
             isLight
@@ -86,38 +76,22 @@ export default function Hero() {
           }`}
         />
 
-        {/* Soft vignette */}
-
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.10)_100%)]" />
       </div>
 
-      {/* ================= Content ================= */}
-
-      <div className="relative z-10 container mx-auto px-6">
-
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-6 py-12 md:py-20">
         <div className="max-w-4xl">
-
           <motion.div
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.8,
-              ease: 'easeOut',
-            }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-
             <h1
               className={`
-                text-6xl
-                md:text-7xl
-                lg:text-8xl
-                xl:text-[6rem]
-                font-black
-                tracking-tight
-                leading-[0.92]
-                mb-8
-                transition-all
-                duration-500
+                text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl
+                font-black tracking-tight leading-[0.92] mb-6 md:mb-8
+                transition-all duration-500
                 ${
                   isLight
                     ? 'text-slate-900 drop-shadow-[0_4px_16px_rgba(0,0,0,0.15)]'
@@ -129,11 +103,7 @@ export default function Hero() {
 
               <span
                 className={`
-                  block
-                  bg-clip-text
-                  text-transparent
-                  transition-all
-                  duration-500
+                  block bg-clip-text text-transparent transition-all duration-500
                   ${
                     isLight
                       ? 'bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600'
@@ -143,27 +113,18 @@ export default function Hero() {
               >
                 Adventure
               </span>
-
             </h1>
-
           </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.2,
-              duration: 0.8,
-            }}
+            transition={{ delay: 0.2, duration: 0.8 }}
             className={`
               max-w-2xl
-              text-xl
-              md:text-2xl
-              leading-relaxed
-              mb-12
-              transition-all
-              duration-500
-              font-bold
+              text-base sm:text-lg md:text-xl lg:text-2xl
+              leading-relaxed mb-8 md:mb-12
+              transition-all duration-500 font-bold
               ${
                 isLight
                   ? 'text-black drop-shadow-[0_1px_2px_rgba(255,255,255,1)]'
@@ -180,26 +141,17 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.35,
-              duration: 0.8,
-            }}
-            className="flex flex-col sm:flex-row gap-5"
+            transition={{ delay: 0.35, duration: 0.8 }}
+            className="flex flex-col sm:flex-row gap-4 md:gap-5"
           >
-
-            <Link href="/tours">
-
+            <Link href="/tours" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 className={`
-                  group
-                  rounded-2xl
-                  px-10
-                  py-7
-                  text-lg
-                  transition-all
-                  duration-300
-                  hover:scale-105
+                  group w-full sm:w-auto
+                  rounded-2xl px-8 md:px-10 py-5 md:py-7
+                  text-base md:text-lg
+                  transition-all duration-300 hover:scale-105
                   ${
                     isLight
                       ? 'bg-gradient-to-r from-blue-700 to-indigo-700 text-white shadow-xl shadow-blue-700/25'
@@ -207,31 +159,20 @@ export default function Hero() {
                   }
                 `}
               >
-                <span className="flex items-center">
-
+                <span className="flex items-center justify-center">
                   Explore Tours
-
                   <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
-
                 </span>
-
               </Button>
-
             </Link>
 
-            <Link href="/cruises">
-
+            <Link href="/cruises" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 variant="outline"
                 className={`
-                  rounded-2xl
-                  px-10
-                  py-7
-                  text-lg
-                  backdrop-blur-xl
-                  transition-all
-                  duration-300
+                  w-full sm:w-auto rounded-2xl px-8 md:px-10 py-5 md:py-7
+                  text-base md:text-lg backdrop-blur-xl transition-all duration-300
                   ${
                     isLight
                       ? 'bg-white/70 border-slate-300 text-slate-900 hover:bg-white'
@@ -241,23 +182,17 @@ export default function Hero() {
               >
                 Explore Cruises
               </Button>
-
             </Link>
-
           </motion.div>
         </div>
       </div>
 
-      {/* ================= Scroll Indicator ================= */}
-
+      {/* ─── Scroll Indicator – hidden on mobile ─── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{
-          delay: 1,
-          duration: 1,
-        }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
+        transition={{ delay: 1, duration: 1 }}
+        className="hidden sm:flex absolute bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex-col items-center"
       >
         <button
           onClick={() =>
@@ -270,11 +205,8 @@ export default function Hero() {
         >
           <span
             className={`
-              text-[11px]
-              uppercase
-              tracking-[0.45em]
-              transition-all
-              duration-500
+              text-[10px] sm:text-[11px] uppercase tracking-[0.45em]
+              transition-all duration-500
               ${
                 isLight
                   ? 'text-slate-700 group-hover:text-blue-700'
@@ -287,14 +219,8 @@ export default function Hero() {
 
           <div
             className={`
-              mt-3
-              relative
-              h-14
-              w-[2px]
-              overflow-hidden
-              rounded-full
-              transition-all
-              duration-500
+              mt-3 relative h-12 sm:h-14 w-[2px] overflow-hidden rounded-full
+              transition-all duration-500
               ${
                 isLight
                   ? 'bg-slate-300'
@@ -303,21 +229,10 @@ export default function Hero() {
             `}
           >
             <motion.div
-              animate={{
-                y: [-18, 42],
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 1.8,
-                ease: 'easeInOut',
-              }}
+              animate={{ y: [-18, 42] }}
+              transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
               className={`
-                absolute
-                left-0
-                top-0
-                h-6
-                w-full
-                rounded-full
+                absolute left-0 top-0 h-6 w-full rounded-full
                 ${
                   isLight
                     ? 'bg-gradient-to-b from-blue-700 to-blue-500'

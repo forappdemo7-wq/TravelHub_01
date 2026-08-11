@@ -46,7 +46,7 @@ export default function ToursPage() {
         if (!res.ok) throw new Error('Failed to fetch tours');
         const data = await res.json();
         if (isMounted) setTours(data);
-      } catch (err) {
+      } catch (err: any) {
         if (err.name === 'AbortError') return;
         console.error(err);
         if (isMounted) setError('Failed to load tours. Please try again later.');
@@ -136,7 +136,7 @@ export default function ToursPage() {
           <div className="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-2xl mb-6 shadow-lg border border-white/20">
             <Compass className="w-10 h-10 text-emerald-300" strokeWidth={1.5} />
           </div>
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">
             Curated <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300">Expeditions</span>
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/80 max-w-2xl mx-auto font-light">
@@ -201,7 +201,7 @@ export default function ToursPage() {
                     </label>
                     <span className="text-xs text-stone-500 dark:text-stone-400">Set your maximum price per person</span>
                   </div>
-                  <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                  <span className="text-xl md:text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                     ${priceRange}
                   </span>
                 </div>
@@ -214,7 +214,7 @@ export default function ToursPage() {
                   onChange={(e) => setPriceRange(Number(e.target.value))}
                   className="w-full h-2.5 bg-stone-200 rounded-lg appearance-none cursor-pointer dark:bg-stone-700 accent-emerald-600"
                 />
-                <div className="flex justify-between text-xs font-medium text-stone-400 dark:text-stone-500 mt-3">
+                <div className="flex justify-between text-xs font-medium text-stone-400 dark:text-stone-500 mt-3 hidden sm:flex">
                   <span>$0</span>
                   <span>$500</span>
                   <span>$1000</span>
@@ -223,15 +223,20 @@ export default function ToursPage() {
                   <span>$2500</span>
                   <span>$3000</span>
                 </div>
+                <div className="flex justify-between text-xs font-medium text-stone-400 dark:text-stone-500 mt-3 sm:hidden">
+                  <span>$0</span>
+                  <span>$1500</span>
+                  <span>$3000</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Results Header */}
-        <div className="flex justify-between items-center mb-8 px-2">
-          <p className="text-stone-500 dark:text-stone-400">
-            Showing <span className="font-bold text-stone-900 dark:text-white text-lg mx-1">{filteredTours.length}</span> adventures
+        <div className="flex justify-between items-center mb-6 md:mb-8 px-2">
+          <p className="text-stone-500 dark:text-stone-400 text-sm md:text-base">
+            Showing <span className="font-bold text-stone-900 dark:text-white text-base md:text-lg mx-1">{filteredTours.length}</span> adventures
           </p>
           {hasActiveFilters && (
             <button
@@ -246,8 +251,8 @@ export default function ToursPage() {
           )}
         </div>
 
-        {/* Tours Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* ─── Tours Grid – Fixed for Mobile ─── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
           {filteredTours.map((tour) => {
             const isFav = isFavorite(tour.id, 'tour');
             const isLoading = favLoadingId === tour.id;
@@ -259,13 +264,13 @@ export default function ToursPage() {
                 <button
                   onClick={() => handleToggleFavorite(tour)}
                   disabled={isLoading}
-                  className="absolute top-4 left-4 z-20 p-2 rounded-full bg-white/80 dark:bg-stone-800/80 backdrop-blur-sm hover:scale-110 transition disabled:opacity-50"
+                  className="absolute top-3 md:top-4 left-3 md:left-4 z-20 p-2 md:p-2 rounded-full bg-white/80 dark:bg-stone-800/80 backdrop-blur-sm hover:scale-110 transition disabled:opacity-50"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <Heart
-                      className={`w-5 h-5 transition-colors ${
+                      className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${
                         isFav ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300'
                       }`}
                     />
@@ -273,7 +278,7 @@ export default function ToursPage() {
                 </button>
 
                 {/* Image Section */}
-                <div className="relative h-72 overflow-hidden bg-stone-100 dark:bg-stone-900">
+                <div className="relative h-48 sm:h-52 md:h-56 lg:h-72 overflow-hidden bg-stone-100 dark:bg-stone-900">
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 to-transparent z-10"></div>
                   <img
                     src={tour.image}
@@ -286,48 +291,48 @@ export default function ToursPage() {
                   />
                   
                   {/* Rating Badge - Top Right */}
-                  <div className="absolute top-4 right-4 z-20 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm">
-                    <div className="flex items-center gap-1.5">
-                      <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                      <span className="font-bold text-sm text-stone-700 dark:text-stone-200">{tour.rating}</span>
+                  <div className="absolute top-3 md:top-4 right-3 md:right-4 z-20 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md px-2 md:px-3 py-1 md:py-1.5 rounded-full shadow-sm">
+                    <div className="flex items-center gap-1 md:gap-1.5">
+                      <Star className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-500 fill-amber-500" />
+                      <span className="font-bold text-xs md:text-sm text-stone-700 dark:text-stone-200">{tour.rating}</span>
                     </div>
                   </div>
                   
-                  <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between text-white/90 text-sm font-medium">
-                    <div className="flex items-center gap-1.5 bg-stone-900/50 backdrop-blur-sm px-2.5 py-1 rounded-md">
-                      <MapPin className="w-4 h-4 text-emerald-400" />
-                      <span className="truncate max-w-[120px]">{tour.location}</span>
+                  <div className="absolute bottom-3 md:bottom-4 left-3 md:left-4 right-3 md:right-4 z-20 flex items-center justify-between text-white/90 text-xs md:text-sm font-medium">
+                    <div className="flex items-center gap-1 md:gap-1.5 bg-stone-900/50 backdrop-blur-sm px-2 md:px-2.5 py-1 md:py-1 rounded-md">
+                      <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-400" />
+                      <span className="truncate max-w-[120px] md:max-w-[120px]">{tour.location}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 bg-stone-900/50 backdrop-blur-sm px-2.5 py-1 rounded-md">
-                      <Clock className="w-4 h-4 text-emerald-400" />
-                      {tour.duration}
+                    <div className="flex items-center gap-1 md:gap-1.5 bg-stone-900/50 backdrop-blur-sm px-2 md:px-2.5 py-1 md:py-1 rounded-md">
+                      <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-400" />
+                      <span>{tour.duration}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="flex flex-col flex-grow p-6">
-                  <h3 className="text-2xl font-bold mb-3 text-stone-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
+                <div className="flex flex-col flex-grow p-4 md:p-6">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 md:mb-3 text-stone-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
                     {tour.name}
                   </h3>
                   
-                  <p className="text-stone-600 dark:text-stone-400 mb-6 line-clamp-3 text-sm leading-relaxed flex-grow">
+                  <p className="text-stone-600 dark:text-stone-400 mb-4 md:mb-6 line-clamp-2 md:line-clamp-3 text-sm md:text-sm leading-relaxed flex-grow block">
                     {tour.description}
                   </p>
                   
-                  <div className="flex items-end justify-between pt-5 border-t border-stone-100 dark:border-stone-700/50 mt-auto">
+                  <div className="flex items-end justify-between pt-4 md:pt-5 border-t border-stone-100 dark:border-stone-700/50 mt-auto">
                     <div>
-                      <p className="text-xs text-stone-500 dark:text-stone-400 font-medium mb-0.5">Starting from</p>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-extrabold text-stone-900 dark:text-white">
+                      <p className="text-xs text-stone-500 dark:text-stone-400 font-medium mb-0 block">Starting from</p>
+                      <div className="flex items-baseline gap-1 md:gap-1">
+                        <span className="text-xl sm:text-2xl md:text-3xl font-extrabold text-stone-900 dark:text-white">
                           {formatPrice(tour.price)}
                         </span>
-                        <span className="text-stone-500 dark:text-stone-400 text-sm">/pp</span>
+                        <span className="text-xs md:text-sm text-stone-500 dark:text-stone-400 inline">/pp</span>
                       </div>
                     </div>
                     <Link href={`/tours/${tour.id}`}>
-                      <Button variant="outline" size="sm" className="rounded-full group/btn hover:bg-emerald-50 dark:hover:bg-emerald-900/20 border-stone-200 dark:border-stone-700">
-                        Explore <ChevronRight className="w-4 h-4 ml-1 inline group-hover/btn:translate-x-1 transition-transform" />
+                      <Button variant="outline" size="sm" className="rounded-full group/btn hover:bg-emerald-50 dark:hover:bg-emerald-900/20 border-stone-200 dark:border-stone-700 text-sm px-4 py-2 md:py-1.5">
+                        Explore <ChevronRight className="w-4 h-4 md:w-4 md:h-4 ml-1 md:ml-1 inline group-hover/btn:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
                   </div>

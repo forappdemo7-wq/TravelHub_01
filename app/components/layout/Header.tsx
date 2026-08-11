@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { Menu, X, Compass, User, ChevronDown, LogOut, BookOpen, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,7 +16,6 @@ export default function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const router = useRouter();
   const { data: session, status } = useSession();
   const { isChatbotVisible, toggleChatbot } = useChatbot();
 
@@ -90,7 +89,7 @@ export default function Header() {
     visible: { opacity: 1, x: 0 },
   };
 
-  // Dropdown items with navigation
+  // Dropdown items
   const dropdownItems = [
     { label: 'Profile', icon: User, href: '/dashboard' },
     { label: 'My Bookings', icon: BookOpen, href: '/my-bookings' },
@@ -103,7 +102,8 @@ export default function Header() {
       item.action();
     }
     if (item.href) {
-      router.push(item.href);
+      // Use window.location for navigation
+      window.location.href = item.href;
     }
     setDropdownOpen(false);
   };
@@ -112,35 +112,35 @@ export default function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-2xl border-b border-gray-200/50 dark:border-white/10 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)]'
-          : 'bg-transparent border-b border-transparent py-5'
+          ? 'bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-2xl border-b border-gray-200/50 dark:border-white/10 py-2 md:py-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)]'
+          : 'bg-transparent border-b border-transparent py-2 md:py-5'
       }`}
     >
-      <nav className="container mx-auto px-4 md:px-6">
+      <nav className="container mx-auto px-3 sm:px-4 md:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* ─── Logo ─── */}
           <div className="flex-1 flex justify-start">
-            <Link href="/" className="flex items-center gap-3 group" onClick={() => setIsOpen(false)}>
+            <Link href="/" className="flex items-center gap-2 md:gap-3 group" onClick={() => setIsOpen(false)}>
               <motion.div
                 whileHover={{ scale: 1.05, rotate: 10 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl shadow-[0_0_15px_rgba(59,130,246,0.5)] group-hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] transition-shadow duration-300"
+                className="p-1.5 sm:p-2 md:p-2.5 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg md:rounded-xl shadow-[0_0_15px_rgba(59,130,246,0.5)] group-hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] transition-shadow duration-300"
               >
-                <Compass className="w-6 h-6 text-white" />
+                <Compass className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6 text-white" />
               </motion.div>
-              <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent hidden sm:block">
-                TravelHub
-              </span>
+              <span className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent hidden sm:block">
+  TravelHub
+</span>
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* ─── Desktop Navigation ─── */}
           <div className="hidden md:flex items-center gap-1 bg-black/5 dark:bg-white/5 backdrop-blur-md p-1.5 rounded-full border border-black/5 dark:border-white/10">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300 whitespace-nowrap ${
+                className={`relative px-3.5 py-1.5 text-xs font-medium rounded-full transition-colors duration-300 whitespace-nowrap ${
                   isActive(item.href)
                     ? 'text-white'
                     : 'text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
@@ -158,25 +158,25 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Right Actions */}
-          <div className="flex-1 flex justify-end items-center gap-3">
-            <div className="hidden sm:flex items-center gap-3">
+          {/* ─── Right Actions ─── */}
+          <div className="flex-1 flex justify-end items-center gap-1 sm:gap-2 md:gap-3">
+            <div className="hidden sm:flex items-center gap-1 md:gap-3">
               <CurrencySwitcher />
-              <div className="w-px h-6 bg-gray-300 dark:bg-gray-700" />
+              <div className="w-px h-4 md:h-6 bg-gray-300 dark:bg-gray-700" />
               <DarkModeToggle />
             </div>
 
-            {/* User Dropdown */}
-            <div className="hidden md:block ml-2 relative" ref={dropdownRef}>
+            {/* ─── User Dropdown ─── */}
+            <div className="ml-1 md:ml-2 relative" ref={dropdownRef}>
               {status === 'loading' ? (
-                <div className="w-32 h-10 bg-gray-200 dark:bg-white/10 rounded-full animate-pulse" />
+                <div className="w-24 sm:w-28 md:w-32 h-8 md:h-10 bg-gray-200 dark:bg-white/10 rounded-full animate-pulse" />
               ) : session ? (
                 <>
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center gap-2 bg-gray-900 dark:bg-white/10 dark:hover:bg-white/20 dark:border dark:border-white/10 text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors shadow-lg hover:bg-gray-800"
+                    className="flex items-center gap-1 md:gap-2 bg-gray-900 dark:bg-white/10 dark:hover:bg-white/20 dark:border dark:border-white/10 text-white py-1.5 px-2.5 md:py-2 md:px-4 rounded-full text-xs md:text-sm font-semibold transition-colors shadow-lg hover:bg-gray-800"
                   >
-                    <div className="w-6 h-6 rounded-full bg-white/20 dark:bg-black/20 overflow-hidden flex-shrink-0 flex items-center justify-center ring-2 ring-white/10">
+                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white/20 dark:bg-black/20 overflow-hidden flex-shrink-0 flex items-center justify-center ring-2 ring-white/10">
                       {userAvatar ? (
                         <img
                           key={userAvatar}
@@ -188,14 +188,16 @@ export default function Header() {
                           }}
                         />
                       ) : (
-                        <User className="w-4 h-4 text-white dark:text-gray-300" />
+                        <User className="w-3.5 h-3.5 md:w-4 md:h-4 text-white dark:text-gray-300" />
                       )}
                     </div>
-                    <span className="max-w-[100px] truncate">{userName}</span>
-                    <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                    <span className="max-w-[60px] sm:max-w-[80px] md:max-w-[100px] truncate hidden xs:inline">
+                      {userName}
+                    </span>
+                    <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
 
-                  {/* Dropdown Menu */}
+                  {/* ─── Dropdown Menu ─── */}
                   <AnimatePresence>
                     {dropdownOpen && (
                       <motion.div
@@ -203,23 +205,40 @@ export default function Header() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+                        className="absolute right-0 mt-2 w-48 sm:w-56 bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50"
                       >
-                        <div className="p-2">
+                        <div className="p-1.5 sm:p-2">
                           {dropdownItems.map((item, index) => {
                             const Icon = item.icon;
                             const isLast = index === dropdownItems.length - 1;
+                            if (item.href) {
+                              return (
+                                <Link
+                                  key={item.label}
+                                  href={item.href}
+                                  onClick={() => setDropdownOpen(false)}
+                                  className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                                    isLast
+                                      ? 'text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30'
+                                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10'
+                                  }`}
+                                >
+                                  <Icon className="w-4 h-5" />
+                                  <span>{item.label}</span>
+                                </Link>
+                              );
+                            }
                             return (
                               <button
                                 key={item.label}
                                 onClick={() => handleDropdownClick(item)}
-                                className={`flex items-center gap-3 w-full px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                                className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                                   isLast
                                     ? 'text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30'
                                     : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10'
                                 }`}
                               >
-                                <Icon className="w-5 h-5" />
+                                <Icon className="w-4 h-5" />
                                 <span>{item.label}</span>
                               </button>
                             );
@@ -234,7 +253,7 @@ export default function Header() {
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-full text-sm font-semibold transition-colors shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)]"
+                    className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 md:px-6 md:py-2 rounded-full text-xs md:text-sm font-semibold transition-colors shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)]"
                   >
                     Sign In
                   </motion.div>
@@ -242,17 +261,18 @@ export default function Header() {
               )}
             </div>
 
+            {/* ─── Mobile Menu Toggle ─── */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2.5 bg-black/5 dark:bg-white/10 text-gray-800 dark:text-gray-200 rounded-full hover:bg-black/10 dark:hover:bg-white/20 transition-colors backdrop-blur-md"
+              className="md:hidden p-2 sm:p-2.5 bg-black/5 dark:bg-white/10 text-gray-800 dark:text-gray-200 rounded-full hover:bg-black/10 dark:hover:bg-white/20 transition-colors backdrop-blur-md"
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
             >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
+              {isOpen ? <X size={18} className="sm:w-5 sm:h-5" /> : <Menu size={18} className="sm:w-5 sm:h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* ─── Mobile Dropdown Menu ─── */}
         <AnimatePresence>
           {isOpen && (
             <>
@@ -261,7 +281,7 @@ export default function Header() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="md:hidden fixed inset-0 top-[76px] bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40"
+                className="md:hidden fixed inset-0 top-[56px] sm:top-[60px] md:top-[76px] bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40"
                 onClick={() => setIsOpen(false)}
               />
 
@@ -270,14 +290,14 @@ export default function Header() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="md:hidden absolute left-4 right-4 top-[84px] z-50 overflow-hidden"
+                className="md:hidden absolute left-3 right-3 sm:left-4 sm:right-4 top-[60px] sm:top-[68px] md:top-[84px] z-50 overflow-hidden"
               >
-                <div className="bg-white/90 dark:bg-[#111]/90 backdrop-blur-2xl border border-gray-200/50 dark:border-white/10 rounded-3xl p-3 shadow-2xl space-y-1">
+                <div className="bg-white/90 dark:bg-[#111]/90 backdrop-blur-2xl border border-gray-200/50 dark:border-white/10 rounded-2xl sm:rounded-3xl p-3 shadow-2xl space-y-1">
                   {navItems.map((item) => (
                     <motion.div key={item.name} variants={menuItemVariants}>
                       <Link
                         href={item.href}
-                        className={`block px-5 py-3.5 rounded-2xl text-base font-medium transition-all ${
+                        className={`block px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-sm sm:text-base font-medium transition-all ${
                           isActive(item.href)
                             ? 'bg-blue-600/10 text-blue-600 dark:text-blue-400'
                             : 'text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5'
@@ -291,19 +311,19 @@ export default function Header() {
 
                   <motion.div
                     variants={menuItemVariants}
-                    className="pt-3 mt-3 border-t border-gray-200/50 dark:border-white/10 flex items-center justify-between px-4 pb-2"
+                    className="pt-3 mt-3 border-t border-gray-200/50 dark:border-white/10 flex items-center justify-between px-2 sm:px-4 pb-2"
                   >
                     <CurrencySwitcher />
                     <DarkModeToggle />
                   </motion.div>
 
-                  {/* Mobile dropdown items – Profile, Bookings, Chatbot, Sign Out */}
+                  {/* ─── Mobile dropdown items ─── */}
                   <motion.div variants={menuItemVariants} className="pt-2 space-y-1">
                     {session ? (
                       <>
                         <Link
                           href="/dashboard"
-                          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
                           onClick={() => setIsOpen(false)}
                         >
                           <User className="w-5 h-5" />
@@ -311,7 +331,7 @@ export default function Header() {
                         </Link>
                         <Link
                           href="/my-bookings"
-                          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
                           onClick={() => setIsOpen(false)}
                         >
                           <BookOpen className="w-5 h-5" />
@@ -322,7 +342,7 @@ export default function Header() {
                             toggleChatbot();
                             setIsOpen(false);
                           }}
-                          className="flex items-center gap-3 w-full text-left px-4 py-3 rounded-2xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                          className="flex items-center gap-3 w-full text-left px-4 py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
                         >
                           <MessageSquare className="w-5 h-5" />
                           {isChatbotVisible ? 'Hide Chatbot' : 'Show Chatbot'}
@@ -332,7 +352,7 @@ export default function Header() {
                             signOut({ callbackUrl: '/' });
                             setIsOpen(false);
                           }}
-                          className="flex items-center gap-3 w-full text-left px-4 py-3 rounded-2xl text-base font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all"
+                          className="flex items-center gap-3 w-full text-left px-4 py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all"
                         >
                           <LogOut className="w-5 h-5" />
                           Sign Out
@@ -341,7 +361,7 @@ export default function Header() {
                     ) : (
                       <Link
                         href="/auth/signin"
-                        className="flex items-center justify-center w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold active:scale-[0.98] transition-transform shadow-lg shadow-blue-600/20"
+                        className="flex items-center justify-center w-full bg-blue-600 text-white py-3.5 rounded-xl sm:rounded-2xl font-semibold active:scale-[0.98] transition-transform shadow-lg shadow-blue-600/20"
                         onClick={() => setIsOpen(false)}
                       >
                         Sign In

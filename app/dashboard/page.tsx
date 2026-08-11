@@ -28,14 +28,12 @@ export default function Dashboard() {
     setMounted(true);
   }, []);
 
-  // When favorites are loaded, stop loading
   useEffect(() => {
     if (sessionStatus !== 'loading') {
       setLoading(false);
     }
   }, [sessionStatus]);
 
-  // ─── Remove favorite ──────────────────────────────────────────────
   const removeFavorite = async (id: string) => {
     const fav = favorites.find(f => f.id === id);
     if (!fav) return;
@@ -58,25 +56,24 @@ export default function Dashboard() {
   const subTextClass = isLight ? 'text-slate-600' : 'text-gray-400';
   const mutedText = isLight ? 'text-slate-500' : 'text-gray-500';
 
-  // ─── Skeleton loading ────────────────────────────────────────────
   if (sessionStatus === 'loading' || loading) {
     return (
-      <div className={`min-h-screen ${bgClass} pt-24 pb-12 px-6 transition-colors duration-500`}>
+      <div className={`min-h-screen ${bgClass} pt-24 sm:pt-32 pb-12 px-4 sm:px-6 transition-colors duration-500`}>
         <div className="container mx-auto max-w-6xl animate-pulse">
           <div className="flex justify-between items-center mb-12">
             <div className="flex gap-4 items-center">
-              <div className={`w-16 h-16 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-full`} />
+              <div className={`w-12 h-12 sm:w-16 sm:h-16 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-full`} />
               <div className="space-y-3">
-                <div className={`h-6 w-48 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-md`} />
-                <div className={`h-4 w-32 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-md`} />
+                <div className={`h-5 w-32 sm:h-6 sm:w-48 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-md`} />
+                <div className={`h-3 w-24 sm:h-4 sm:w-32 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-md`} />
               </div>
             </div>
-            <div className={`h-10 w-24 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-lg`} />
+            <div className={`h-8 w-20 sm:h-10 sm:w-24 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-lg`} />
           </div>
-          <div className={`h-8 w-40 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-md mb-6`} />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          <div className={`h-6 w-32 sm:h-8 sm:w-40 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-md mb-6`} />
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 mb-12">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className={`h-32 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-2xl`} />
+              <div key={i} className={`h-24 sm:h-32 ${isLight ? 'bg-slate-200' : 'bg-gray-800'} rounded-2xl`} />
             ))}
           </div>
         </div>
@@ -84,26 +81,25 @@ export default function Dashboard() {
     );
   }
 
-  // ─── Unauthenticated state ──────────────────────────────────────
   if (sessionStatus === 'unauthenticated') {
     return (
-      <div className={`min-h-screen ${bgClass} pt-24 pb-12 flex items-center transition-colors duration-500`}>
+      <div className={`min-h-screen ${bgClass} pt-24 sm:pt-32 pb-12 flex items-center transition-colors duration-500`}>
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="max-w-md mx-auto"
           >
-            <Card className={`p-10 text-center ${cardBg} backdrop-blur-xl border ${cardBorder} shadow-2xl`}>
-              <div className={`w-16 h-16 ${isLight ? 'bg-blue-100' : 'bg-blue-500/10'} rounded-full flex items-center justify-center mx-auto mb-6`}>
-                <User size={32} className={isLight ? 'text-blue-600' : 'text-blue-400'} />
+            <Card className={`p-6 sm:p-10 text-center ${cardBg} backdrop-blur-xl border ${cardBorder} shadow-2xl`}>
+              <div className={`w-14 h-14 sm:w-16 sm:h-16 ${isLight ? 'bg-blue-100' : 'bg-blue-500/10'} rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6`}>
+                <User size={28} className={isLight ? 'text-blue-600' : 'text-blue-400'} />
               </div>
-              <h1 className={`text-3xl font-bold mb-3 ${textClass}`}>Welcome Back</h1>
-              <p className={`${subTextClass} mb-8 leading-relaxed`}>
+              <h1 className={`text-2xl sm:text-3xl font-bold mb-2 sm:mb-3 ${textClass}`}>Welcome Back</h1>
+              <p className={`${subTextClass} mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base`}>
                 Please sign in to access your bookings, favorites, and personal travel dashboard.
               </p>
               <Link href="/auth/signin" className="block w-full">
-                <Button className="w-full py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors">
+                <Button className="w-full py-3 sm:py-3.5 text-base sm:text-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors">
                   Sign In to Continue
                 </Button>
               </Link>
@@ -144,13 +140,14 @@ export default function Dashboard() {
   };
 
   return (
-    <div className={`min-h-screen ${bgClass} pb-16 pt-24 selection:bg-blue-500/30 transition-colors duration-500`}>
-      <div className="container mx-auto px-6 max-w-7xl">
+    <div className={`min-h-screen ${bgClass} pb-16 pt-24 sm:pt-28 selection:bg-blue-500/30 transition-colors duration-500`}>
+      <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         
-        {/* ─── HEADER ─── */}
+        {/* ─── HEADER – RESTORED ORIGINAL DESIGN ─── */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
           <div className={`flex flex-col md:flex-row items-start md:items-center justify-between gap-6 ${cardBg} border ${cardBorder} p-6 md:p-8 rounded-3xl backdrop-blur-md transition-colors duration-500`}>
             <div className="flex items-center gap-5">
+              {/* ─── Avatar (restored to original size and style) ─── */}
               {session?.user?.avatar ? (
                 <img
                   key={session.user.avatar}
@@ -162,7 +159,7 @@ export default function Dashboard() {
                   }}
                 />
               ) : (
-                <div className={`w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-900/20 text-2xl font-bold text-white`}>
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-900/20 text-2xl font-bold text-white">
                   {userInitial}
                 </div>
               )}
@@ -176,6 +173,7 @@ export default function Dashboard() {
                 </p>
               </div>
             </div>
+            {/* ─── Sign Out Button (original style) ─── */}
             <Button 
               onClick={() => signOut({ callbackUrl: '/' })} 
               variant="outline" 
@@ -198,7 +196,7 @@ export default function Dashboard() {
             <h2 className="text-2xl font-semibold">Quick Actions</h2>
           </div>
           
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
               { label: "Browse Tours", href: "/tours", icon: Globe, color: "text-emerald-400", bg: isLight ? "group-hover:bg-emerald-100" : "group-hover:bg-emerald-500/20" },
               { label: "Browse Cruises", href: "/cruises", icon: Sailboat, color: "text-blue-400", bg: isLight ? "group-hover:bg-blue-100" : "group-hover:bg-blue-500/20" },
