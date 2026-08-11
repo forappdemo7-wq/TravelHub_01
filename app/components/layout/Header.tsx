@@ -191,9 +191,9 @@ export default function Header() {
                         <User className="w-3.5 h-3.5 md:w-4 md:h-4 text-white dark:text-gray-300" />
                       )}
                     </div>
-                    <span className="max-w-[60px] sm:max-w-[80px] md:max-w-[100px] truncate hidden xs:inline">
-                      {userName}
-                    </span>
+                    <span className="max-w-[60px] sm:max-w-[80px] md:max-w-[100px] truncate hidden sm:inline">
+  {userName}
+</span>
                     <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
 

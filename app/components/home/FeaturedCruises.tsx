@@ -88,7 +88,6 @@ export default function FeaturedCruises() {
 
   return (
     <section className="py-12 md:py-24 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-      {/* Optimized base padding for mobile, kept sm/md exactly the same */}
       <div className="container mx-auto px-2 sm:px-4 md:px-6">
         <div className="text-center mb-8 md:mb-16">
           <div className="inline-flex items-center gap-2 md:gap-3 mb-2 md:mb-4">
@@ -105,7 +104,6 @@ export default function FeaturedCruises() {
           </p>
         </div>
 
-        {/* ─── Grid – 3 columns on mobile, 2 on small, 3 on desktop ─── */}
         <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
           {featuredCruises.map((cruise) => {
             const formattedPrice = formatPrice(cruise.price);
@@ -117,7 +115,6 @@ export default function FeaturedCruises() {
                 key={cruise.id}
                 className="group bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-xl md:rounded-2xl lg:rounded-3xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
               >
-                {/* Reduced base mobile height slightly from h-28 to h-24 to balance the layout */}
                 <div className="relative h-24 sm:h-36 md:h-48 lg:h-56 overflow-hidden flex-shrink-0">
                   <img
                     src={cruise.image}
@@ -135,7 +132,6 @@ export default function FeaturedCruises() {
                     {cruise.rating}
                   </div>
 
-                  {/* Added flex items-center justify-center to ensure the heart icon stays centered */}
                   <button
                     onClick={() => handleToggleFavorite(cruise)}
                     disabled={isLoading}
@@ -165,17 +161,13 @@ export default function FeaturedCruises() {
                   </div>
                 </div>
 
-                {/* Shaved inner padding on mobile from p-2 to p-1.5 to maximize space */}
                 <div className="p-1.5 sm:p-3 md:p-4 lg:p-6 flex flex-col flex-1">
-                  
-                  {/* Applied truncate to destination and prevented the bullet point from wrapping */}
                   <div className="flex items-center gap-0.5 sm:gap-1 md:gap-2 text-[8px] sm:text-[10px] md:text-xs lg:text-sm text-gray-500 dark:text-gray-400 mb-1 sm:mb-2 md:mb-4 overflow-hidden whitespace-nowrap">
                     <span className="font-semibold text-blue-600 flex-shrink-0">{cruise.ship}</span>
                     <span className="text-gray-300 dark:text-gray-600 flex-shrink-0">•</span>
                     <span className="truncate">{cruise.destination}</span>
                   </div>
 
-                  {/* Fixed line heights on mobile so titles don't unbalance the cards */}
                   <h3 className="text-[9px] min-[360px]:text-[10px] leading-tight sm:text-xs md:text-base lg:text-xl font-semibold mb-1 sm:mb-2 md:mb-4 line-clamp-2 h-[22px] min-[360px]:h-[26px] sm:h-auto sm:min-h-[2rem] md:min-h-[3.25rem] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {cruise.name}
                   </h3>
@@ -185,7 +177,6 @@ export default function FeaturedCruises() {
                   </p>
 
                   <div className="mt-auto pt-1 sm:pt-2 md:pt-3 lg:pt-6 border-t border-gray-100 dark:border-zinc-800">
-                    {/* Changed mobile to flex-col to match Tours spacing, but kept sm:flex-row to preserve exact PC view */}
                     <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-end justify-between gap-1.5 sm:gap-1.5 md:gap-2 lg:gap-4">
                       <div className="w-full sm:w-auto sm:flex-1">
                         <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs text-gray-500 dark:text-gray-400 mb-0 hidden sm:block">Starting from</div>
@@ -195,16 +186,13 @@ export default function FeaturedCruises() {
                         <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs text-gray-500 dark:text-gray-400 hidden sm:block">per person</div>
                       </div>
 
-                      {/* Applied full-width fix with row alignment specifically for mobile */}
-                      <Link href={`/cruises/${cruise.id}`} className="w-full sm:w-auto sm:flex-shrink-0 mt-0.5 sm:mt-0">
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          className="w-full flex flex-row items-center justify-center gap-0.5 sm:gap-1 rounded-md sm:rounded-xl md:rounded-2xl px-1 sm:px-3 md:px-4 lg:px-7 py-1 sm:py-1.5 md:py-2 lg:py-2.5 text-[8px] sm:text-[10px] md:text-xs lg:text-sm font-medium whitespace-nowrap overflow-hidden transition-all hover:shadow-lg active:scale-[0.98]"
-                        >
-                          <span className="truncate">View Details</span>
-                          <ArrowRight className="ml-0.5 sm:ml-1 md:ml-2 w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3.5 md:h-3.5 lg:w-4 lg:h-4 flex-shrink-0 inline transition-transform group-hover:translate-x-1" />
-                        </Button>
+                      {/* ─── CLEAN "View Details" LINK (same style as Featured Tours) ─── */}
+                      <Link
+                        href={`/cruises/${cruise.id}`}
+                        className="text-[10px] sm:text-xs md:text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline inline-flex items-center gap-0.5 sm:gap-1 transition-all w-full sm:w-auto sm:flex-shrink-0 justify-start sm:justify-end"
+                      >
+                        View Details
+                        <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform group-hover:translate-x-1" />
                       </Link>
                     </div>
                   </div>
