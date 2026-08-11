@@ -19,7 +19,8 @@
       "Daily breakfast",
       "Private transportation",
       "English-speaking guide"
-    ]
+    ],
+    "featured": true
   },
   {
     "id": "2",
@@ -41,7 +42,8 @@
       "Traditional Ryokan stay",
       "Cultural workshops",
       "Travel insurance"
-    ]
+    ],
+    "featured": true
   },
   {
     "id": "3",
@@ -63,7 +65,8 @@
       "Sunset dinner cruise",
       "Private transfers",
       "Professional photographer"
-    ]
+    ],
+    "featured": true
   },
   {
     "id": "4",
@@ -85,7 +88,8 @@
       "Mountain hotels",
       "Adventure activities",
       "Swiss Army knife gift"
-    ]
+    ],
+    "featured": true
   },
   {
     "name": "j1",
@@ -117,7 +121,8 @@
     "included": [
       "hh"
     ],
-    "id": "1775202230677"
+    "id": "1775202230677",
+    "featured": false
   },
   {
     "name": "jjjj",
@@ -136,7 +141,8 @@
       "kkk",
       "kk"
     ],
-    "id": "1775465514182"
+    "id": "1775465514182",
+    "featured": false
   },
   {
     "name": "JJJ",
@@ -152,7 +158,8 @@
     "included": [
       "uu"
     ],
-    "id": "1775633053248"
+    "id": "1775633053248",
+    "featured": false
   },
   {
     "name": "hello ",
@@ -168,6 +175,20 @@
     "included": [
       "??"
     ],
-    "id": "1776147294946"
+    "id": "1776147294946",
+    "featured": false
+  },
+  {
+    "name": "kkk",
+    "location": "kkk",
+    "duration": "kkk",
+    "price": 677,
+    "rating": 3,
+    "image": "https://images.pexels.com/photos/30310543/pexels-photo-30310543.jpeg",
+    "description": "uyuuy",
+    "highlights": [],
+    "included": [],
+    "featured": false,
+    "id": "1786458031380"
   }
 ]

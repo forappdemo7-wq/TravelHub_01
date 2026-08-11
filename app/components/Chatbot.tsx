@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { Send, X, Sparkles, ArrowRight, RotateCcw } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 import { useChatbot } from '@/app/context/ChatbotContext';
+import { usePathname } from 'next/navigation'; // 👈 Import
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -36,8 +37,14 @@ const dynamicQueries = [
 ];
 
 export default function Chatbot() {
+  const pathname = usePathname(); // 👈 Get current path
   const { formatPrice } = useCurrency();
-  const { isChatbotVisible } = useChatbot(); // ✅ Get visibility state
+  const { isChatbotVisible } = useChatbot();
+
+  // ✅ Hide on admin pages
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   // If chatbot is hidden via header dropdown, don't render anything
   if (!isChatbotVisible) return null;
@@ -251,6 +258,7 @@ export default function Chatbot() {
     <motion.div
       drag
       dragMomentum={false}
+      dragControls={dragControls}
       dragConstraints={{ left: -windowSize.width + (isOpen ? 460 : 430), right: 10, top: -windowSize.height + (isOpen ? 560 : 120), bottom: 10 }}
       dragElastic={0.1}
       onDragStart={() => isDragging.current = true}

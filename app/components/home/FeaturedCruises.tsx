@@ -36,13 +36,16 @@ export default function FeaturedCruises() {
 
     const fetchCruises = async () => {
       try {
-        const res = await fetch('/api/cruises', { signal: abortController.signal });
-        if (!res.ok) throw new Error('Failed to fetch cruises');
+        // ─── Fetch only featured cruises ────────────────────────────
+        const res = await fetch('/api/cruises?featured=true', {
+          signal: abortController.signal,
+        });
+        if (!res.ok) throw new Error('Failed to fetch featured cruises');
         const data = await res.json();
         if (isMounted) setCruises(data);
       } catch (error: any) {
         if (error.name === 'AbortError') return;
-        console.error('Error fetching cruises:', error);
+        console.error('Error fetching featured cruises:', error);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -82,9 +85,26 @@ export default function FeaturedCruises() {
     );
   }
 
-  if (cruises.length === 0) return null;
+  const featuredCruises = cruises;   // 👈 shows ALL featured cruises (no limit)
 
-  const featuredCruises = cruises.slice(0, 3);
+  if (featuredCruises.length === 0) {
+    return (
+      <section className="py-12 md:py-24 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6 text-center">
+          <div className="inline-flex items-center gap-2 md:gap-3 mb-2 md:mb-4">
+            <Ship className="w-7 h-7 md:w-9 md:h-9 text-blue-600" />
+            <span className="uppercase tracking-[2px] md:tracking-[3px] text-[10px] md:text-sm font-semibold text-blue-600">
+              Luxury at Sea
+            </span>
+          </div>
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4">
+            <span className="gradient-text">Featured Cruises</span>
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400">No featured cruises available at the moment.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-12 md:py-24 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
@@ -186,7 +206,6 @@ export default function FeaturedCruises() {
                         <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs text-gray-500 dark:text-gray-400 hidden sm:block">per person</div>
                       </div>
 
-                      {/* ─── CLEAN "View Details" LINK (same style as Featured Tours) ─── */}
                       <Link
                         href={`/cruises/${cruise.id}`}
                         className="text-[10px] sm:text-xs md:text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline inline-flex items-center gap-0.5 sm:gap-1 transition-all w-full sm:w-auto sm:flex-shrink-0 justify-start sm:justify-end"

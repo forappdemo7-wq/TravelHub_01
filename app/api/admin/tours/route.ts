@@ -2,35 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdmin } from '@/lib/adminAuth';
 import prisma from '@/lib/db';
 
-// ─── GET: Public listing (supports ?featured=true & ?id=...) ──
+// ─── GET: List all tours (admin) ─────────────────────────────
 export async function GET(req: NextRequest) {
+  if (!(await verifyAdmin(req))) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
-    const { searchParams } = new URL(req.url);
-    const featured = searchParams.get('featured') === 'true';
-    const id = searchParams.get('id');
-
-    if (id) {
-      const tour = await prisma.tour.findUnique({ where: { id } });
-      return NextResponse.json(tour || null);
-    }
-
-    const tours = await prisma.tour.findMany({
-      where: featured ? { featured: true } : undefined,
-      orderBy: { name: 'asc' },
-    });
+    const tours = await prisma.tour.findMany({ orderBy: { name: 'asc' } });
     return NextResponse.json(tours);
   } catch (error) {
-    console.error('GET tours error:', error);
+    console.error('Admin GET tours error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-// ─── POST: Admin only ──────────────────────────────────────────
+// ─── POST ──────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   if (!(await verifyAdmin(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-
   try {
     const body = await req.json();
     const { name, location, duration, price, rating, image, description, highlights, included, images, featured } = body;
@@ -56,12 +46,12 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json(newTour, { status: 201 });
   } catch (error) {
-    console.error('POST error:', error);
+    console.error('Admin POST error:', error);
     return NextResponse.json({ error: 'Failed to create tour' }, { status: 500 });
   }
 }
 
-// ─── PUT: Admin only ──────────────────────────────────────────
+// ─── PUT ──────────────────────────────────────────────────────
 export async function PUT(req: NextRequest) {
   if (!(await verifyAdmin(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -98,12 +88,12 @@ export async function PUT(req: NextRequest) {
     });
     return NextResponse.json(updated);
   } catch (error) {
-    console.error('PUT error:', error);
+    console.error('Admin PUT error:', error);
     return NextResponse.json({ error: 'Failed to update tour' }, { status: 500 });
   }
 }
 
-// ─── DELETE: Admin only ──────────────────────────────────────
+// ─── DELETE ──────────────────────────────────────────────────
 export async function DELETE(req: NextRequest) {
   if (!(await verifyAdmin(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -119,7 +109,7 @@ export async function DELETE(req: NextRequest) {
     await prisma.tour.delete({ where: { id } });
     return NextResponse.json({ message: 'Tour deleted successfully' });
   } catch (error) {
-    console.error('DELETE error:', error);
+    console.error('Admin DELETE error:', error);
     return NextResponse.json({ error: 'Failed to delete tour' }, { status: 500 });
   }
 }

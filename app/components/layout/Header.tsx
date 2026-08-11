@@ -19,6 +19,11 @@ export default function Header() {
   const { data: session, status } = useSession();
   const { isChatbotVisible, toggleChatbot } = useChatbot();
 
+  // ✅ Hide header on admin pages (e.g., /admin/tours/new)
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

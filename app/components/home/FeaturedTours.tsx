@@ -38,14 +38,17 @@ export default function FeaturedTours() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch('/api/tours', { signal: abortController.signal });
+        // ─── Fetch only featured tours ──────────────────────────────
+        const res = await fetch('/api/tours?featured=true', {
+          signal: abortController.signal,
+        });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data: Tour[] = await res.json();
         if (isMounted) setTours(data);
       } catch (error: any) {
         if (error.name === 'AbortError') return;
-        console.error('Error fetching tours:', error);
-        if (isMounted) setError('Unable to load tours. Please try again.');
+        console.error('Error fetching featured tours:', error);
+        if (isMounted) setError('Unable to load featured tours. Please try again.');
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -89,7 +92,22 @@ export default function FeaturedTours() {
     );
   }
 
-  const featuredTours = tours.slice(0, 4);
+  // ─── NEW: Show ALL featured tours (no slicing) ──────────────────
+  // Optionally sort by newest first (id is a timestamp string)
+  const featuredTours = [...tours].sort((a, b) => Number(b.id) - Number(a.id));
+
+  if (featuredTours.length === 0) {
+    return (
+      <section className="py-12 md:py-24 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6 text-center">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4">
+            <span className="gradient-text">Featured Tours</span>
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400">No featured tours available at the moment.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-12 md:py-24 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
@@ -103,7 +121,7 @@ export default function FeaturedTours() {
           </p>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
           {featuredTours.map((tour) => {
             const formattedPrice = formatPrice(tour.price);
             const isFav = isFavorite(tour.id, 'tour');
@@ -177,7 +195,6 @@ export default function FeaturedTours() {
                         <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs text-gray-500 dark:text-gray-400 hidden sm:block">per person</div>
                       </div>
 
-                      {/* ─── CLEAN "View Details" LINK ─── */}
                       <Link
                         href={`/tours/${tour.id}`}
                         className="text-[10px] sm:text-xs md:text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline inline-flex items-center gap-0.5 sm:gap-1 transition-all mt-0.5"

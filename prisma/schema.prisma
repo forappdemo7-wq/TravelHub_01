@@ -32,6 +32,7 @@ model Tour {
   description String
   highlights  String[]
   included    String[]
+  featured    Boolean  @default(false)
 }
 
 model Cruise {
@@ -43,6 +44,7 @@ model Cruise {
   image       String
   description String
   destination String
+  featured    Boolean  @default(false)
 }
 
 model Restaurant {

@@ -17,6 +17,7 @@ export default function EditTour() {
     description: '',
     highlights: [''],
     included: [''],
+    featured: false, // ✅ new field
   });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -46,6 +47,7 @@ export default function EditTour() {
       description: data.description,
       highlights: data.highlights?.length ? data.highlights : [''],
       included: data.included?.length ? data.included : [''],
+      featured: data.featured ?? false, // ✅ load existing value
     });
     setLoading(false);
   };
@@ -66,6 +68,7 @@ export default function EditTour() {
         rating: Number(formData.rating),
         highlights: formData.highlights.filter(h => h),
         included: formData.included.filter(i => i),
+        featured: formData.featured, // ✅ include in payload
       }),
     });
     if (res.ok) {
@@ -214,6 +217,22 @@ export default function EditTour() {
             <button type="button" onClick={() => addArrayItem('included')} className="text-blue-400 text-sm">
               + Add Included Item
             </button>
+          </div>
+
+          {/* ✅ Featured Toggle */}
+          <div className="pt-4 border-t border-gray-700">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={formData.featured}
+                onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                className="w-5 h-5 accent-blue-500"
+              />
+              <span className="text-sm font-medium text-gray-200">Feature on Home</span>
+            </label>
+            <p className="text-xs text-gray-500 mt-1">
+              This tour will appear on the home page if checked.
+            </p>
           </div>
 
           <div className="flex gap-4 pt-4">
