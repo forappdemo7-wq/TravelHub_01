@@ -13,12 +13,12 @@ export default function EditCruise() {
     destination: '',
     duration: '',
     price: '',
-    rating: '',
+    rating: '0',           // ✅ default to string '0'
     image: '',
     description: '',
     highlights: [''],
     included: [''],
-    featured: false, // ✅ added
+    featured: false,
   });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -38,18 +38,19 @@ export default function EditCruise() {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
+
     setFormData({
-      name: data.name,
-      ship: data.ship,
-      destination: data.destination,
-      duration: data.duration,
-      price: data.price,
-      rating: data.rating,
-      image: data.image,
-      description: data.description,
+      name: data.name || '',
+      ship: data.ship || '',
+      destination: data.destination || '',
+      duration: data.duration || '',
+      price: data.price?.toString() || '',
+      rating: data.rating?.toString() || '0',   // ✅ fallback to '0'
+      image: data.image || '',
+      description: data.description || '',
       highlights: data.highlights?.length ? data.highlights : [''],
       included: data.included?.length ? data.included : [''],
-      featured: data.featured ?? false, // ✅ load existing value
+      featured: data.featured ?? false,
     });
     setLoading(false);
   };
@@ -68,9 +69,9 @@ export default function EditCruise() {
         ...formData,
         price: Number(formData.price),
         rating: Number(formData.rating),
-        highlights: formData.highlights.filter(h => h),
-        included: formData.included.filter(i => i),
-        featured: formData.featured, // ✅ include in payload
+        highlights: formData.highlights.filter(h => h.trim() !== ''),
+        included: formData.included.filter(i => i.trim() !== ''),
+        featured: formData.featured,
       }),
     });
     if (res.ok) {
@@ -91,7 +92,7 @@ export default function EditCruise() {
     setFormData({ ...formData, [field]: [...formData[field], ''] });
   };
 
-  if (loading) return <div className="min-h-screen bg-gray-950 flex items-center justify-center">Loading...</div>;
+  if (loading) return <div className="min-h-screen bg-gray-950 flex items-center justify-center text-white">Loading...</div>;
 
   return (
     <div className="min-h-screen bg-gray-950">
@@ -162,31 +163,29 @@ export default function EditCruise() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Rating (1-5)</label>
-              <input
-                type="number"
-                step="0.1"
-                min="0"
-                max="5"
-                value={formData.rating}
-                onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
-                required
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Rating (1-5)</label>
+            <input
+              type="number"
+              step="0.1"
+              min="0"
+              max="5"
+              value={formData.rating}
+              onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
+              required
+            />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Image URL</label>
             <input
-                type="url"
-                value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
-                required
-              />
+              type="url"
+              value={formData.image}
+              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
+              required
+            />
           </div>
 
           <div>

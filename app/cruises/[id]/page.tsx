@@ -290,7 +290,7 @@ export default function CruiseDetailPage() {
             </div>
             
             <div className="mt-8 px-4 text-center">
-              <p className="text-xs text-slate-400 font-mono opacity-50">Reference: 69a51e2cc0c1216a818de968</p>
+              <p className="text-xs text-slate-400 font-mono opacity-50"></p>
             </div>
           </div>
 

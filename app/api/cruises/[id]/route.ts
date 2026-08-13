@@ -22,6 +22,9 @@ export async function GET(
         image: true,
         description: true,
         featured: true,
+        highlights: true,   // ✅ ADDED
+        rating: true,       // ✅ ADDED
+        included: true,   // ✅ ADDED
       },
     });
 
@@ -65,6 +68,9 @@ export async function PUT(
         description: body.description ?? existing.description,
         destination: body.destination ?? existing.destination,
         featured: body.featured !== undefined ? body.featured : existing.featured,
+        highlights: body.highlights ?? existing.highlights, // ✅ ADDED
+        rating: body.rating !== undefined ? Number(body.rating) : existing.rating, // ✅ ADDED
+        included: body.included ?? existing.included, // ✅ ADDED
       },
     });
 

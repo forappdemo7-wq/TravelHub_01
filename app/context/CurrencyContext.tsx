@@ -13,7 +13,7 @@ interface Currency {
 
 const currencies: Record<CurrencyCode, Currency> = {
   USD: { code: 'USD', symbol: '$', rate: 1, name: 'US Dollar' },
-  INR: { code: 'INR', symbol: '₹', rate: 95.5, name: 'Indian Rupee' },
+  INR: { code: 'INR', symbol: '₹', rate: 95.33, name: 'Indian Rupee' },
   JPY: { code: 'JPY', symbol: '¥', rate: 158.8, name: 'Japanese Yen' },
   EUR: { code: 'EUR', symbol: '€', rate: 0.85, name: 'Euro' },
   GBP: { code: 'GBP', symbol: '£', rate: 0.74, name: 'British Pound' },

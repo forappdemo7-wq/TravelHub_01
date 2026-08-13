@@ -1,9 +1,9 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { Heart } from 'lucide-react';
 import { useFavorites } from '@/app/hooks/useFavorites';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 
 interface FavoriteButtonProps {
   itemId: string;
@@ -11,8 +11,7 @@ interface FavoriteButtonProps {
   itemName: string;
   itemImage: string;
   itemPrice: number;
-  variant?: 'full' | 'compact';
-  className?: string;
+  variant?: 'compact' | 'full';
 }
 
 export default function FavoriteButton({
@@ -21,59 +20,73 @@ export default function FavoriteButton({
   itemName,
   itemImage,
   itemPrice,
-  variant = 'full',
-  className = '',
+  variant = 'compact',
 }: FavoriteButtonProps) {
   const { data: session } = useSession();
-  const router = useRouter();
-  const { isFavorite, toggleFavorite, loading } = useFavorites();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [isLoading, setIsLoading] = useState(false);
 
   const isFav = isFavorite(itemId, itemType);
 
-  const handleToggle = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (!session) {
-      const callbackUrl = encodeURIComponent(
-        window.location.pathname + window.location.search
-      );
-      router.push(`/auth/signin?callbackUrl=${callbackUrl}`);
+      alert('Please sign in to add favorites.');
       return;
     }
 
-    await toggleFavorite({ itemId, itemType, itemName, itemImage, itemPrice });
+    setIsLoading(true);
+    try {
+      await toggleFavorite({
+        itemId,
+        itemType,
+        itemName,
+        itemImage,
+        itemPrice,
+      });
+    } catch (error) {
+      console.error('Toggle favorite error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  if (variant === 'compact') {
+  if (variant === 'full') {
     return (
       <button
-        onClick={handleToggle}
-        disabled={loading}
-        className={`p-2 rounded-full transition-colors duration-200 ${
-          isFav
-            ? 'bg-rose-500 text-white hover:bg-rose-600 shadow-lg shadow-rose-500/30'
-            : 'bg-black/50 backdrop-blur-sm text-white hover:bg-rose-500 hover:text-white'
-        } ${className}`}
-        title={isFav ? 'Remove from favorites' : 'Add to favorites'}
+        onClick={handleClick}
+        disabled={isLoading}
+        className="group flex items-center gap-2 w-full py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95 disabled:opacity-50"
       >
-        <Heart className={`w-4 h-4 ${isFav ? 'fill-white' : ''}`} />
+        {isLoading ? (
+          <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        ) : (
+          <Heart className={`w-5 h-5 transition-colors ${isFav ? 'fill-red-500 text-red-500' : 'group-hover:text-red-500'}`} />
+        )}
+        {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
       </button>
     );
   }
 
+  // ─── Compact version (used in cards) ─────────────────────────────
   return (
     <button
-      onClick={handleToggle}
-      disabled={loading}
-      className={`flex items-center justify-center gap-2 w-full py-4 px-6 rounded-2xl transition-all ${
-        isFav
-          ? 'bg-rose-500 hover:bg-rose-600 text-white shadow-lg shadow-rose-500/30'
-          : 'bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300'
-      } ${className}`}
+      onClick={handleClick}
+      disabled={isLoading}
+      className="p-2 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md rounded-full hover:scale-110 active:scale-95 transition-all shadow-sm disabled:opacity-70 flex items-center justify-center"
+      aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
     >
-      <Heart className={`w-5 h-5 ${isFav ? 'fill-white' : ''}`} />
-      {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
+      {isLoading ? (
+        <div className="w-5 h-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+      ) : (
+        <Heart
+          className={`w-5 h-5 transition-all ${
+            isFav ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-300 hover:text-red-500'
+          }`}
+        />
+      )}
     </button>
   );
 }

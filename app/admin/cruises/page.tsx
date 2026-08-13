@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Edit, Trash2, Plus, ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
+import { Edit, Trash2, Plus, ArrowLeft, CheckCircle, XCircle, Star } from 'lucide-react';
 
 interface Cruise {
   id: string;
@@ -12,7 +12,8 @@ interface Cruise {
   image: string;
   price: number;
   duration: string;
-  featured: boolean; // ✅ added
+  rating?: number;     // ✅ added
+  featured: boolean;
 }
 
 export default function AdminCruises() {
@@ -122,18 +123,10 @@ export default function AdminCruises() {
       <div className="container mx-auto px-6 py-10">
         <div className="bg-gray-900 rounded-3xl overflow-hidden border border-gray-800">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1000px]">
+            <table className="w-full min-w-[1100px]">
               <thead className="bg-gray-800">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Image</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cruise Name</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Ship</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Duration</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Featured</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
+  <tr><th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Image</th><th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cruise Name</th><th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Ship</th><th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Duration</th><th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th><th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Rating</th><th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Featured</th><th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th></tr>
+</thead>
               <tbody className="divide-y divide-gray-800">
                 {cruises.map((cruise) => (
                   <tr key={cruise.id} className="hover:bg-gray-800/70 transition-colors group">
@@ -153,6 +146,16 @@ export default function AdminCruises() {
                     <td className="px-6 py-5 text-gray-400">{cruise.duration}</td>
                     <td className="px-6 py-5 font-semibold text-emerald-400">
                       ${cruise.price.toLocaleString()}
+                    </td>
+                    <td className="px-6 py-5">
+                      {cruise.rating ? (
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="text-gray-300">{cruise.rating.toFixed(1)}</span>
+                        </div>
+                      ) : (
+                        <span className="text-gray-500 text-sm">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-5">
                       <button

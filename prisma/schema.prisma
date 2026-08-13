@@ -45,6 +45,9 @@ model Cruise {
   description String
   destination String
   featured    Boolean  @default(false)
+  highlights  String[] @default([])
+  rating      Float?
+  included    String[] @default([])   // ✅ ADD THIS LINE
 }
 
 model Restaurant {
