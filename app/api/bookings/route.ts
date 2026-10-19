@@ -3,12 +3,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/lib/db';
+import { verifyAdmin } from '@/lib/adminAuth'; // 👈 Import this
 
 // ─── GET: Fetch bookings (by email for user, or all for admin) ──────────
 export async function GET(req: NextRequest) {
   try {
+    // 1. Check if request is from Admin panel
+    const isAdmin = await verifyAdmin(req);
+    
+    // 2. Check if request is from a logged-in user
     const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+
+    // If neither, block it
+    if (!isAdmin && !session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -23,10 +30,12 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(bookings);
     }
 
-    // Admin can see all bookings (you can add role check later)
+    // Admin gets all bookings (or normal user gets their own)
     const bookings = await prisma.booking.findMany({
+      where: isAdmin ? {} : { userEmail: session!.user!.email! },
       orderBy: { bookingDate: 'desc' },
     });
+    
     return NextResponse.json(bookings);
   } catch (error) {
     console.error('GET bookings error:', error);
@@ -49,7 +58,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid itemType' }, { status: 400 });
     }
 
-    // ─── Ensure numeric fields ──────────────────────────────────────
     const travelers = Number(data.travelers);
     const totalPrice = Number(data.totalPrice);
     const itemPrice = Number(data.itemPrice);
@@ -58,7 +66,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid travelers count' }, { status: 400 });
     }
 
-    // ─── Find the user by email to get the correct userId ──────────
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
       select: { id: true },
@@ -70,7 +77,7 @@ export async function POST(req: NextRequest) {
 
     const booking = await prisma.booking.create({
       data: {
-        userId: user.id, // use the real user ID from the database
+        userId: user.id,
         userEmail: session.user.email,
         userName: data.userName,
         userPhone: data.userPhone,
@@ -98,8 +105,10 @@ export async function POST(req: NextRequest) {
 // ─── PUT: Update booking status (admin or user cancelling) ──────────────
 export async function PUT(req: NextRequest) {
   try {
+    const isAdmin = await verifyAdmin(req);
     const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    
+    if (!isAdmin && !session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -114,9 +123,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
     }
 
-    // Authorization: admin or owner
-    const isAdmin = session.user?.role === 'admin';
-    if (!isAdmin && booking.userEmail !== session.user.email) {
+    if (!isAdmin && booking.userEmail !== session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
     if (!isAdmin && status !== 'cancelled') {
@@ -138,8 +145,10 @@ export async function PUT(req: NextRequest) {
 // ─── DELETE: Remove a booking (admin only) ──────────────────────────────
 export async function DELETE(req: NextRequest) {
   try {
+    const isAdmin = await verifyAdmin(req);
     const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    
+    if (!isAdmin && !session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -150,7 +159,6 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: 'Missing booking id' }, { status: 400 });
     }
 
-    // Optional: add admin check here
     await prisma.booking.delete({ where: { id } });
 
     return NextResponse.json({ message: 'Booking deleted successfully' });
