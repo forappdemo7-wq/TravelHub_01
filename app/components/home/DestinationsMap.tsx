@@ -43,14 +43,10 @@ export default function DestinationsMap() {
 
   const isLight = mounted && resolvedTheme === 'light';
 
-  // ✅ API KEY SETUP
-  // Uses the Vercel env variable, but falls back to your key if it's not found (for local testing)
-  const apiKey = process.env.NEXT_PUBLIC_CARTO_API_KEY || 'cb1_4ore_1_5ab4626c0db75a0de8a831de';
-
-  // Choose tile URL based on theme and include the API key
+    // ✅ Switched to keyless tile providers to fix watermarks
   const tileUrl = isLight
-    ? `https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?api_key=${apiKey}`
-    : `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?api_key=${apiKey}`;
+    ? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    : 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png';
 
   // Text & Glow Colors
   const textColor = isLight ? 'text-slate-800' : 'text-white';
@@ -105,6 +101,7 @@ export default function DestinationsMap() {
           <div className={`rounded-[31px] overflow-hidden relative transition-colors duration-500`}>
             {/* Map container */}
             <MapContainer
+              key={isLight ? 'light-map' : 'dark-map'} // ✅ FIXES THE CRASH
               center={[25, 10]}
               zoom={2.5}
               style={{ height: '550px', width: '100%', backgroundColor: mapBgColor }}
@@ -113,7 +110,7 @@ export default function DestinationsMap() {
             >
               <TileLayer
                 url={tileUrl}
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
               {destinations.map((dest, i) => (
                 <Marker key={i} position={[dest.lat, dest.lng]}>
