@@ -43,10 +43,14 @@ export default function DestinationsMap() {
 
   const isLight = mounted && resolvedTheme === 'light';
 
-  // Choose tile URL based on theme
+  // ✅ API KEY SETUP
+  // Uses the Vercel env variable, but falls back to your key if it's not found (for local testing)
+  const apiKey = process.env.NEXT_PUBLIC_CARTO_API_KEY || 'cb1_4ore_1_5ab4626c0db75a0de8a831de';
+
+  // Choose tile URL based on theme and include the API key
   const tileUrl = isLight
-    ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    ? `https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?api_key=${apiKey}`
+    : `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?api_key=${apiKey}`;
 
   // Text & Glow Colors
   const textColor = isLight ? 'text-slate-800' : 'text-white';
