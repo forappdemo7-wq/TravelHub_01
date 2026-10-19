@@ -197,3 +197,8 @@
 .animate-slide-up {
   animation: slideUp 0.3s ease-out;
 }
+
+/* ✅ Map Inversion for Dark Mode */
+.dark-map-tiles .leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
