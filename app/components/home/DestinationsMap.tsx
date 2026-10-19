@@ -43,10 +43,8 @@ export default function DestinationsMap() {
 
   const isLight = mounted && resolvedTheme === 'light';
 
-    // ✅ Switched to keyless tile providers to fix watermarks
-  const tileUrl = isLight
-    ? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-    : 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png';
+  // ✅ Use free, keyless OpenStreetMap tiles for BOTH modes
+  const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
   // Text & Glow Colors
   const textColor = isLight ? 'text-slate-800' : 'text-white';
@@ -98,7 +96,8 @@ export default function DestinationsMap() {
               : 'bg-gradient-to-b from-white/10 to-transparent shadow-blue-900/20'
           }`}
         >
-          <div className={`rounded-[31px] overflow-hidden relative transition-colors duration-500`}>
+          {/* ✅ Added dynamic class for the dark mode CSS filter */}
+          <div className={`rounded-[31px] overflow-hidden relative transition-colors duration-500 ${!isLight ? 'dark-map-tiles' : ''}`}>
             {/* Map container */}
             <MapContainer
               key={isLight ? 'light-map' : 'dark-map'} // ✅ FIXES THE CRASH
